@@ -21,11 +21,7 @@ public interface MainActivityContract {
 
     interface View extends BaseView {
 
-        void hideLoadingProgress();
 
-        void showError(String errorMessage);
-
-        void showLoadingProgress();
 
         void showSearchQuery(String keyword);
 

@@ -6,6 +6,8 @@ import dev.android.kevin.project.base.contract.ListFragmentContract;
 import dev.android.kevin.project.data.RetrofitManager;
 import dev.android.kevin.project.model.PlaceSearchBean;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
@@ -36,17 +38,25 @@ public class ListFragmentPresenter implements ListFragmentContract.Presenter {
         RetrofitManager.provideUserRepository().fetchList("40.736748369881035,-73.82068104165768","5000",keyword, "chinese","AIzaSyBBt4YtyVgJ2N3S7vUHlGw8F1sZY26bM20" )
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+                        view.showLoadingProgress();
+                    }
+                })
                 .subscribeWith(new DisposableObserver<PlaceSearchBean>() {
                     @Override
                     public void onNext(PlaceSearchBean placeSearchBean) {
                        Log.d("xuyang=======", String.valueOf(placeSearchBean.getResults()));
 
                        view.showList(placeSearchBean.getResults());
+                       view.hideLoadingProgress();
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         Log.d("xuyang", e.toString());
+                        view.showError(e.toString());
 
                     }
 

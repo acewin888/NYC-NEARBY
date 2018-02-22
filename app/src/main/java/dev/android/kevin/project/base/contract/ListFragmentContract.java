@@ -23,5 +23,11 @@ public interface ListFragmentContract {
 
         void showList(List<PlaceSearchBean.Results> list);
 
+        void hideLoadingProgress();
+
+        void showError(String errorMessage);
+
+        void showLoadingProgress();
+
     }
 }

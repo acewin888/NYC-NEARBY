@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import dev.android.kevin.project.R;
 import dev.android.kevin.project.base.contract.MainActivityContract;
 import dev.android.kevin.project.data.RetrofitManager;
@@ -25,12 +27,14 @@ import io.reactivex.schedulers.Schedulers;
 public class MainActivity extends AppCompatActivity implements MainActivityContract.View {
 
 
-    android.support.v7.widget.SearchView searchView;
-
-
     private MainActivityContract.Presenter presenter;
 
 
+    @BindView(R.id.navigation)
+    BottomNavigationView navigation;
+
+    @BindView(R.id.searchView)
+    android.support.v7.widget.SearchView searchView;
 
 
     @Override
@@ -38,34 +42,18 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ButterKnife.bind(this);
+
         presenter = new MainActivityPresenter();
 
         presenter.attachView(this);
 
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
-        searchView = (android.support.v7.widget.SearchView) findViewById(R.id.searchView);
         searchView.setOnQueryTextListener(onQueryTextListener);
 
 
-
     }
 
-    @Override
-    public void hideLoadingProgress() {
-
-    }
-
-    @Override
-    public void showError(String errorMessage) {
-
-    }
-
-    @Override
-    public void showLoadingProgress() {
-
-    }
 
     @Override
     public void showSearchQuery(String keyword) {
@@ -82,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.add(R.id.response_container, listFragment,"listfragment");
+        transaction.add(R.id.response_container, listFragment, "listfragment");
         transaction.commit();
 
 
