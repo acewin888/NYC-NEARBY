@@ -39,7 +39,7 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     @Override
     public int getItemCount() {
-        return 0;
+        return list.size();
     }
 
     public static class PlaceSearchViewHolder extends RecyclerView.ViewHolder {

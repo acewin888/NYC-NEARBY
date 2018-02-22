@@ -3,16 +3,25 @@ package dev.android.kevin.project.UI;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+
 import dev.android.kevin.project.R;
+import dev.android.kevin.project.UI.adpater.PlaceSearchAdapter;
+import dev.android.kevin.project.base.contract.ListFragmentContract;
+import dev.android.kevin.project.model.PlaceSearchBean;
+import dev.android.kevin.project.presenter.ListFragmentPresenter;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ListFragment extends Fragment {
+public class ListFragment extends Fragment implements ListFragmentContract.View{
+
 
 
     public ListFragment() {
@@ -20,10 +29,35 @@ public class ListFragment extends Fragment {
     }
 
 
+    private ListFragmentContract.Presenter presenter;
+
+
+    private RecyclerView recyclerView;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_list, container, false);
+
+
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+
+
+        presenter = new ListFragmentPresenter();
+
+        presenter.attachView(this);
+
+
+        presenter.fetchList(getArguments().getString("keyword"));
+
+        return  view;
     }
 
+    @Override
+    public void showList(List<PlaceSearchBean.Results> list) {
+        PlaceSearchAdapter adapter = new PlaceSearchAdapter(list);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+    }
 }
