@@ -56,7 +56,7 @@ public class PlaceSearchBean {
 
         private int price_level;
 
-        private int rating;
+        private float rating;
 
         private List<String> types;
 
@@ -119,11 +119,11 @@ public class PlaceSearchBean {
             this.price_level = price_level;
         }
 
-        public int getRating() {
+        public float getRating() {
             return rating;
         }
 
-        public void setRating(int rating) {
+        public void setRating(float rating) {
             this.rating = rating;
         }
 

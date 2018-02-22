@@ -20,7 +20,7 @@ public interface RetrofitAPI {
     Observable<PlaceSearchBean> fetchList(@Query("location") String location, @Query("radius") String radius, @Query("type") String type, @Query("keyword") String keyword, @Query("key") String key);
 
 
-    String detail = "https://maps.googleapis.com/maps/api/place/details/json?placeid=ChIJVVVV-UtewokRZwx6c-W9aoY&key=AIzaSyBBt4YtyVgJ2N3S7vUHlGw8F1sZY26bM20";
+   // String detail = "https://maps.googleapis.com/maps/api/place/details/json?placeid=ChIJVVVV-UtewokRZwx6c-W9aoY&key=AIzaSyBBt4YtyVgJ2N3S7vUHlGw8F1sZY26bM20";
 
     @GET("details/json")
     Observable<DetailBean> fetchDetail(@Query("placeid") String placeid, @Query("key") String key);

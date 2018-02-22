@@ -1,5 +1,6 @@
 package dev.android.kevin.project.data;
 
+import dev.android.kevin.project.model.DetailBean;
 import dev.android.kevin.project.model.PlaceSearchBean;
 import io.reactivex.Observable;
 
@@ -9,7 +10,9 @@ import io.reactivex.Observable;
 
 public interface Repository {
 
-    Observable<PlaceSearchBean> fetchList();
+    Observable<PlaceSearchBean> fetchList(String location, String radius, String type, String keyword, String key);
+
+    Observable<DetailBean> fetchDetail(String placeid, String key);
 
 
 
