@@ -20,11 +20,8 @@ import dev.android.kevin.project.base.contract.ListFragmentContract;
 import dev.android.kevin.project.model.PlaceSearchBean;
 import dev.android.kevin.project.presenter.ListFragmentPresenter;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class ListFragment extends Fragment implements ListFragmentContract.View{
 
+public class ListFragment extends Fragment implements ListFragmentContract.View {
 
 
     public ListFragment() {
@@ -46,7 +43,7 @@ public class ListFragment extends Fragment implements ListFragmentContract.View{
         View view = inflater.inflate(R.layout.fragment_list, container, false);
 
 
-        ButterKnife.bind(this,view);
+        ButterKnife.bind(this, view);
 
 
         presenter = new ListFragmentPresenter();
@@ -56,12 +53,13 @@ public class ListFragment extends Fragment implements ListFragmentContract.View{
 
         presenter.fetchList(getArguments().getString("keyword"));
 
-        return  view;
+        return view;
     }
 
     @Override
     public void showList(List<PlaceSearchBean.Results> list) {
         PlaceSearchAdapter adapter = new PlaceSearchAdapter(list);
+        adapter.setOnItemClickListener((MainActivity) getActivity());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }

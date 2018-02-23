@@ -16,6 +16,9 @@ public interface MainActivityContract {
 
 
         void populateListFragment(String keyword);
+
+
+        void populateDetailFragment(String placeid);
     }
 
 
@@ -27,6 +30,8 @@ public interface MainActivityContract {
 
 
         void showListFragment(String keyword);
+
+        void showDetailFragment(String placeid);
 
 
     }

@@ -33,4 +33,9 @@ public class MainActivityPresenter implements MainActivityContract.Presenter {
         view.showListFragment(keyword);
 
     }
+
+    @Override
+    public void populateDetailFragment(String placeid) {
+        view.showDetailFragment(placeid);
+    }
 }

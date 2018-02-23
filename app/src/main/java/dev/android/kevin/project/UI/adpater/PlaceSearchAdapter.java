@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -27,6 +28,13 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
 
     private List<PlaceSearchBean.Results> list;
 
+
+    private OnItemClickListener onItemClickListener;
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
     public PlaceSearchAdapter(List<PlaceSearchBean.Results> list) {
         this.list = list;
     }
@@ -39,31 +47,106 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
     }
 
     @Override
-    public void onBindViewHolder(PlaceSearchViewHolder holder, int position) {
+    public void onBindViewHolder(PlaceSearchViewHolder holder, final int position) {
         holder.nameView.setText(list.get(position).getName());
         holder.ratingView.setText(String.valueOf(list.get(position).getRating()));
-        holder.typesView.setText(String.valueOf(list.get(position).getTypes().toArray()));
         holder.addressView.setText(list.get(position).getVicinity());
-        holder.priceView.setText(String.valueOf(list.get(position).getPrice_level()));
 
-        if(list.get(position).getOpening_hours() != null ){
-            if(list.get(position).getOpening_hours().isOpen_now()){
+
+        List<String> types = list.get(position).getTypes();
+
+
+        String typeList = "";
+
+        for (int i = 0; i < types.size(); i++) {
+            typeList += types.get(i);
+        }
+        holder.typesView.setText(typeList);
+
+        if (list.get(position).getOpening_hours() != null) {
+            if (!list.get(position).getOpening_hours().isOpen_now()) {
                 holder.orderButton.setVisibility(View.GONE);
             }
         }
 
 
-
         List<PlaceSearchBean.Results.Photos> photos = list.get(position).getPhotos();
 
-        if(photos != null){
+        if (photos != null) {
             String reference = photos.get(0).getPhoto_reference();
-            String url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=500&photoreference=" + reference + "&key=AIzaSyBBt4YtyVgJ2N3S7vUHlGw8F1sZY26bM20";
-             Picasso.with(holder.itemImage.getContext()).load(url).into(holder.itemImage);
+            String url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=150&photoreference=" + reference + "&key=AIzaSyBBt4YtyVgJ2N3S7vUHlGw8F1sZY26bM20";
+            Picasso.with(holder.itemImage.getContext()).load(url).into(holder.itemImage);
 
         }
 
+        holder.itemContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String placeid = list.get(position).getPlace_id();
 
+                onItemClickListener.onItemClick(placeid);
+            }
+        });
+
+
+        double lat1 = 40.736748369881035;
+        double lon1 = -73.8206810416576;
+
+        double lat2 = list.get(position).getGeometry().getLocation().getLat();
+        double long2 = list.get(position).getGeometry().getLocation().getLng();
+
+        double distance = distance(lat1, lat2, lon1, long2, 0, 0);
+        holder.distanceView.setText(String.valueOf(distance));
+
+
+        holder.priceView.setText(getPriceRange(list.get(position).getPrice_level()));
+
+
+    }
+
+    private String getPriceRange(int rating) {
+        String price;
+        switch (rating) {
+            case 0:
+                price = "$";
+                break;
+            case 1:
+                price = "$$";
+                break;
+            case 2:
+                price = "$$$";
+                break;
+            case 3:
+                price = "$$$$";
+                break;
+            case 4:
+                price = "$$$$$";
+                break;
+            default:
+                price = "unknow";
+
+        }
+        return price;
+    }
+
+    private double distance(double lat1, double lat2, double lon1,
+                            double lon2, double el1, double el2) {
+
+        final int R = 6371; // Radius of the earth
+
+        double latDistance = Math.toRadians(lat2 - lat1);
+        double lonDistance = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        double distance = R * c * 1000; // convert to meters
+
+        double height = el1 - el2;
+
+        distance = Math.pow(distance, 2) + Math.pow(height, 2);
+
+        return Math.sqrt(distance);
     }
 
     @Override
@@ -89,6 +172,8 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
         TextView priceView;
         @BindView(R.id.item_button)
         Button orderButton;
+        @BindView(R.id.item_container)
+        LinearLayout itemContainer;
 
 
         public PlaceSearchViewHolder(View itemView) {
@@ -98,5 +183,9 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
 
 
         }
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(String placeid);
     }
 }

@@ -16,6 +16,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import dev.android.kevin.project.R;
+import dev.android.kevin.project.UI.adpater.PlaceSearchAdapter;
 import dev.android.kevin.project.base.contract.MainActivityContract;
 import dev.android.kevin.project.data.RetrofitManager;
 import dev.android.kevin.project.model.PlaceSearchBean;
@@ -24,7 +25,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
-public class MainActivity extends AppCompatActivity implements MainActivityContract.View {
+public class MainActivity extends AppCompatActivity implements MainActivityContract.View, PlaceSearchAdapter.OnItemClickListener{
 
 
     private MainActivityContract.Presenter presenter;
@@ -76,6 +77,20 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
     }
 
+    @Override
+    public void showDetailFragment(String placeid) {
+        DetailFragment detailFragment = new DetailFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("placeid", placeid);
+        detailFragment.setArguments(bundle);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.response_container, detailFragment, "detailfragment").addToBackStack("stack");
+        transaction.commit();
+
+    }
+
 
     private android.support.v7.widget.SearchView.OnQueryTextListener onQueryTextListener = new android.support.v7.widget.SearchView.OnQueryTextListener() {
         @Override
@@ -115,27 +130,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         }
     };
 
+    @Override
+    public void onItemClick(String placeid) {
+        presenter.populateDetailFragment(placeid);
+    }
 
-    //        String search = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=40.736748369881035,-73.82068104165768&radius=5000&type=restaurant&keyword=chinese&key=AIzaSyBBt4YtyVgJ2N3S7vUHlGw8F1sZY26bM20";
-//
-//        RetrofitManager.provideUserRepository().fetchList("40.736748369881035,-73.82068104165768","5000","restaurant", "chinese","AIzaSyBBt4YtyVgJ2N3S7vUHlGw8F1sZY26bM20" )
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribeWith(new DisposableObserver<PlaceSearchBean>() {
-//                    @Override
-//                    public void onNext(PlaceSearchBean placeSearchBean) {
-//                       Log.d("xuyang=======", String.valueOf(placeSearchBean.getResults()));
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//                        Log.d("xuyang", e.toString());
-//
-//                    }
-//
-//                    @Override
-//                    public void onComplete() {
-//
-//                    }
-//                });
+
 }
