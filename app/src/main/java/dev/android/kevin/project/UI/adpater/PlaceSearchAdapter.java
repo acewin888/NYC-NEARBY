@@ -1,5 +1,6 @@
 package dev.android.kevin.project.UI.adpater;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,6 +29,8 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
 
     private List<PlaceSearchBean.Results> list;
 
+    private Context context;
+
 
     private OnItemClickListener onItemClickListener;
 
@@ -35,13 +38,14 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
         this.onItemClickListener = onItemClickListener;
     }
 
-    public PlaceSearchAdapter(List<PlaceSearchBean.Results> list) {
+    public PlaceSearchAdapter(List<PlaceSearchBean.Results> list, Context context) {
         this.list = list;
+        this.context = context;
     }
 
     @Override
     public PlaceSearchViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.search_list_item, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.search_list_item, parent, false);
 
         return new PlaceSearchViewHolder(view);
     }
@@ -75,7 +79,7 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
         if (photos != null) {
             String reference = photos.get(0).getPhoto_reference();
             String url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=150&photoreference=" + reference + "&key=AIzaSyBBt4YtyVgJ2N3S7vUHlGw8F1sZY26bM20";
-            Picasso.with(holder.itemImage.getContext()).load(url).into(holder.itemImage);
+            Picasso.with(context).load(url).into(holder.itemImage);
 
         }
 
@@ -95,7 +99,8 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
         double lat2 = list.get(position).getGeometry().getLocation().getLat();
         double long2 = list.get(position).getGeometry().getLocation().getLng();
 
-        double distance = distance(lat1, lat2, lon1, long2, 0, 0);
+        double distance1 = distance(lat1, lat2, lon1, long2, 0, 0);
+        int distance = (int) distance1;
         holder.distanceView.setText(String.valueOf(distance));
 
 

@@ -1,4 +1,4 @@
-package dev.android.kevin.project.model.prefs;
+package dev.android.kevin.project.data.prefs;
 
 /**
  * Created by kevinsun on 2/24/18.

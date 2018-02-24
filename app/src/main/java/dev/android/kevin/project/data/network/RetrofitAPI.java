@@ -1,4 +1,4 @@
-package dev.android.kevin.project.data;
+package dev.android.kevin.project.data.network;
 
 import dev.android.kevin.project.model.DetailBean;
 import dev.android.kevin.project.model.PlaceSearchBean;
@@ -24,4 +24,9 @@ public interface RetrofitAPI {
 
     @GET("details/json")
     Observable<DetailBean> fetchDetail(@Query("placeid") String placeid, @Query("key") String key);
+
+
+    @GET("nearbysearch/json")
+    Observable<PlaceSearchBean> fetchListByRank(@Query("location") String location, @Query("rankby") String rankby, @Query("type") String type, @Query("keyword") String keyword, @Query("key") String key);
+
 }

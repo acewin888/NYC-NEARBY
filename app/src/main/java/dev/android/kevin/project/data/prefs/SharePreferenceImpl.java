@@ -1,4 +1,4 @@
-package dev.android.kevin.project.model.prefs;
+package dev.android.kevin.project.data.prefs;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;

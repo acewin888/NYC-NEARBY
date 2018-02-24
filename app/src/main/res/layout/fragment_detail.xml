@@ -6,17 +6,16 @@
 
 
     <LinearLayout
-        android:layout_margin="8dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="8dp"
         android:orientation="vertical">
 
         <ImageView
             android:id="@+id/item_icon"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_location_on_black_24dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
@@ -90,8 +89,7 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/photo_list"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" />
+                android:layout_height="wrap_content" />
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView

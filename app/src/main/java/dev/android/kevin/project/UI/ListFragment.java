@@ -58,7 +58,7 @@ public class ListFragment extends Fragment implements ListFragmentContract.View 
 
     @Override
     public void showList(List<PlaceSearchBean.Results> list) {
-        PlaceSearchAdapter adapter = new PlaceSearchAdapter(list);
+        PlaceSearchAdapter adapter = new PlaceSearchAdapter(list, getActivity());
         adapter.setOnItemClickListener((MainActivity) getActivity());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -77,5 +77,11 @@ public class ListFragment extends Fragment implements ListFragmentContract.View 
     @Override
     public void showLoadingProgress() {
         progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        presenter.removeView();
     }
 }

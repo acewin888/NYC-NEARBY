@@ -3,6 +3,7 @@ package dev.android.kevin.project.UI;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,11 +11,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import org.w3c.dom.Text;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import dev.android.kevin.project.R;
+import dev.android.kevin.project.UI.adpater.PhotoAdapter;
+import dev.android.kevin.project.UI.adpater.ReviewAdapter;
 import dev.android.kevin.project.base.contract.DetailFragmentContract;
 import dev.android.kevin.project.model.DetailBean;
 import dev.android.kevin.project.presenter.DetailFragmentPresenter;
@@ -36,6 +41,8 @@ public class DetailFragment extends Fragment implements DetailFragmentContract.V
     TextView nameView;
     @BindView(R.id.item_rating)
     TextView ratingView;
+
+
     @BindView(R.id.item_types)
     TextView typesView;
     @BindView(R.id.item_address)
@@ -73,7 +80,27 @@ public class DetailFragment extends Fragment implements DetailFragmentContract.V
 
     @Override
     public void showDetail(DetailBean detailBean) {
+
+
+        Picasso.with(getActivity()).load(detailBean.getResult().getIcon()).into(iconView);
         nameView.setText(detailBean.getResult().getName());
         ratingView.setText(String.valueOf(detailBean.getResult().getRating()));
+
+
+
+        PhotoAdapter photoAdapter = new PhotoAdapter(detailBean.getResult().getPhotos());
+        photo_recyclerView.setAdapter(photoAdapter);
+        photo_recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL,false));
+
+
+        ReviewAdapter reviewAdapter = new ReviewAdapter(detailBean.getResult().getReviews());
+        review_recyclerView.setAdapter(reviewAdapter);
+        review_recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.removeView();
     }
 }

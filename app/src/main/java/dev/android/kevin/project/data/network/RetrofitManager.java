@@ -1,9 +1,7 @@
-package dev.android.kevin.project.data;
+package dev.android.kevin.project.data.network;
 
-import java.io.File;
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -23,10 +21,6 @@ public class RetrofitManager {
     public static void setBaseApiUrl(String url) {
         nullifyRetrofitInstance();
         BASE_API_URL = url;
-    }
-
-    public static Repository provideUserRepository() {
-        return new RepositoryImpl(provideUserRestService());
     }
 
     private static void nullifyRetrofitInstance() {
@@ -71,7 +65,7 @@ public class RetrofitManager {
         return mRetrofitInstance;
     }
 
-    private static RetrofitAPI provideUserRestService() {
+    public static RetrofitAPI provideUserRestService() {
         if (mUserRestService == null) {
             mUserRestService = getRetrofitInstance().create(RetrofitAPI.class);
         }

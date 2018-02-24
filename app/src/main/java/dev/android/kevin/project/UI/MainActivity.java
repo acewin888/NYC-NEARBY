@@ -1,5 +1,6 @@
 package dev.android.kevin.project.UI;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -8,22 +9,16 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.SearchView;
-import android.widget.TextView;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import dev.android.kevin.project.R;
 import dev.android.kevin.project.UI.adpater.PlaceSearchAdapter;
 import dev.android.kevin.project.base.contract.MainActivityContract;
-import dev.android.kevin.project.data.RetrofitManager;
-import dev.android.kevin.project.model.PlaceSearchBean;
+import dev.android.kevin.project.data.prefs.SharePreferenceHelper;
+import dev.android.kevin.project.data.prefs.SharePreferenceImpl;
 import dev.android.kevin.project.presenter.MainActivityPresenter;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.observers.DisposableObserver;
-import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity implements MainActivityContract.View, PlaceSearchAdapter.OnItemClickListener{
 
@@ -53,6 +48,19 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         searchView.setOnQueryTextListener(onQueryTextListener);
 
 
+        SharePreferenceHelper helper = new SharePreferenceImpl();
+        Log.d("xuyangsun==",helper.getRadius() );
+        Log.d("xuyangsun==",helper.getSearchType() );
+        Log.d("xuyangsun==",String.valueOf(helper.searchByRating()));
+        Log.d("xuyangsun==",String.valueOf(helper.searchByDistance()));
+
+
+    }
+
+    @OnClick(R.id.filter_setting)
+    public void onClick(){
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
     }
 
 
@@ -135,5 +143,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         presenter.populateDetailFragment(placeid);
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        presenter.removeView();
+    }
 }
