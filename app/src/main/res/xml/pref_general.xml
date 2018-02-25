@@ -14,7 +14,7 @@
         android:summary="select number from 100 to 50000 m"/>
 
     <ListPreference
-        
+
         android:defaultValue="restaurant"
         android:entries="@array/pref_example_list_titles"
         android:entryValues="@array/pref_example_list_values"
@@ -28,12 +28,13 @@
     <!-- NOTE: EditTextPreference accepts EditText attributes. -->
     <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
     <CheckBoxPreference
+        android:dependency="distance"
         android:defaultValue="false"
         android:key="rating"
-        android:title="sorty by rating"/>
+        android:title="sorty by best match"/>
     <CheckBoxPreference
         android:defaultValue="false"
-        android:disableDependentsState="false"
+        android:disableDependentsState="true"
         android:key="distance"
         android:title="sort by distance" />
 

@@ -20,6 +20,7 @@ import butterknife.ButterKnife;
 import dev.android.kevin.project.R;
 import dev.android.kevin.project.model.DetailBean;
 import dev.android.kevin.project.model.PlaceSearchBean;
+import dev.android.kevin.project.util.Utility;
 
 /**
  * Created by kevinsun on 2/21/18.
@@ -28,11 +29,9 @@ import dev.android.kevin.project.model.PlaceSearchBean;
 public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.PlaceSearchViewHolder> {
 
     private List<PlaceSearchBean.Results> list;
-
     private Context context;
-
-
     private OnItemClickListener onItemClickListener;
+    private LayoutInflater layoutInflater;
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
@@ -41,13 +40,12 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
     public PlaceSearchAdapter(List<PlaceSearchBean.Results> list, Context context) {
         this.list = list;
         this.context = context;
+        layoutInflater = LayoutInflater.from(context);
     }
 
     @Override
     public PlaceSearchViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.search_list_item, parent, false);
-
-        return new PlaceSearchViewHolder(view);
+        return new PlaceSearchViewHolder(layoutInflater.inflate(R.layout.search_list_item, parent, false));
     }
 
     @Override
@@ -80,14 +78,12 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
             String reference = photos.get(0).getPhoto_reference();
             String url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=150&photoreference=" + reference + "&key=AIzaSyBBt4YtyVgJ2N3S7vUHlGw8F1sZY26bM20";
             Picasso.with(context).load(url).into(holder.itemImage);
-
         }
 
         holder.itemContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String placeid = list.get(position).getPlace_id();
-
                 onItemClickListener.onItemClick(placeid);
             }
         });
@@ -99,7 +95,7 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
         double lat2 = list.get(position).getGeometry().getLocation().getLat();
         double long2 = list.get(position).getGeometry().getLocation().getLng();
 
-        double distance1 = distance(lat1, lat2, lon1, long2, 0, 0);
+        double distance1 = Utility.distance(lat1, lat2, lon1, long2, 0, 0);
         int distance = (int) distance1;
         holder.distanceView.setText(String.valueOf(distance));
 
@@ -134,26 +130,6 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
         return price;
     }
 
-    private double distance(double lat1, double lat2, double lon1,
-                            double lon2, double el1, double el2) {
-
-        final int R = 6371; // Radius of the earth
-
-        double latDistance = Math.toRadians(lat2 - lat1);
-        double lonDistance = Math.toRadians(lon2 - lon1);
-        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
-                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
-                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        double distance = R * c * 1000; // convert to meters
-
-        double height = el1 - el2;
-
-        distance = Math.pow(distance, 2) + Math.pow(height, 2);
-
-        return Math.sqrt(distance);
-    }
-
     @Override
     public int getItemCount() {
         return list.size();
@@ -183,10 +159,7 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
 
         public PlaceSearchViewHolder(View itemView) {
             super(itemView);
-
             ButterKnife.bind(this, itemView);
-
-
         }
     }
 

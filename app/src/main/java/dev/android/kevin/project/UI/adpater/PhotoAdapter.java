@@ -1,5 +1,6 @@
 package dev.android.kevin.project.UI.adpater;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,46 +24,44 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
 
 
     private List<DetailBean.Result.Photos> list;
+    private Context context;
+    private LayoutInflater layoutInflater;
 
-    public PhotoAdapter(List<DetailBean.Result.Photos> list) {
+    public PhotoAdapter(List<DetailBean.Result.Photos> list, Context context) {
         this.list = list;
+        this.context = context;
+        layoutInflater = LayoutInflater.from(context);
     }
 
     @Override
     public PhotoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.photo_list_item, parent, false);
-
-
-        return new PhotoViewHolder(view);
+        return new PhotoViewHolder(layoutInflater.inflate(R.layout.photo_list_item, parent, false));
     }
 
     @Override
     public void onBindViewHolder(PhotoViewHolder holder, int position) {
-
         String reference = list.get(position).getPhoto_reference();
         String url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=300&photoreference=" + reference + "&key=AIzaSyBBt4YtyVgJ2N3S7vUHlGw8F1sZY26bM20";
-
 
         Picasso.with(holder.imageView.getContext()).load(url).into(holder.imageView);
     }
 
     @Override
     public int getItemCount() {
-         if(list == null){
-             return  0;
-         }else {
-             return  list.size();
-         }
+        if (list == null) {
+            return 0;
+        } else {
+            return list.size();
+        }
     }
 
-    public static class PhotoViewHolder extends RecyclerView.ViewHolder{
+    public static class PhotoViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.photo_imageView)
         ImageView imageView;
 
         public PhotoViewHolder(View itemView) {
             super(itemView);
-
             ButterKnife.bind(this, itemView);
         }
     }

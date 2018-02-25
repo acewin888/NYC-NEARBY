@@ -1,5 +1,6 @@
 package dev.android.kevin.project.UI.adpater;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,16 +21,18 @@ import dev.android.kevin.project.model.DetailBean;
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder> {
 
     private List<DetailBean.Result.Reviews> list;
+    private Context context;
+    private LayoutInflater layoutInflater;
 
-    public ReviewAdapter(List<DetailBean.Result.Reviews> list) {
+    public ReviewAdapter(List<DetailBean.Result.Reviews> list, Context context) {
         this.list = list;
+        this.context = context;
+        layoutInflater = LayoutInflater.from(context);
     }
 
     @Override
     public ReviewViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.review_list_item, parent, false);
-
-        return new ReviewViewHolder(view);
+        return new ReviewViewHolder(layoutInflater.inflate(R.layout.review_list_item, parent, false));
     }
 
     @Override
@@ -45,7 +48,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewView
         return list.size();
     }
 
-    public static class ReviewViewHolder extends RecyclerView.ViewHolder{
+    public static class ReviewViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.author)
         TextView authorView;

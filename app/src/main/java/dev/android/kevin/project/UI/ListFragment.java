@@ -2,6 +2,7 @@ package dev.android.kevin.project.UI;
 
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,37 +24,26 @@ import dev.android.kevin.project.presenter.ListFragmentPresenter;
 
 public class ListFragment extends Fragment implements ListFragmentContract.View {
 
-
-    public ListFragment() {
-        // Required empty public constructor
-    }
-
-
-    private ListFragmentContract.Presenter presenter;
-
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
-
     @BindView(R.id.progressbar)
     ProgressBar progressBar;
+
+    private ListFragmentContract.Presenter presenter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_list, container, false);
+        return inflater.inflate(R.layout.fragment_list, container, false);
+    }
 
-
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
-
-
         presenter = new ListFragmentPresenter();
-
         presenter.attachView(this);
-
-
         presenter.fetchList(getArguments().getString("keyword"));
-
-        return view;
     }
 
     @Override
