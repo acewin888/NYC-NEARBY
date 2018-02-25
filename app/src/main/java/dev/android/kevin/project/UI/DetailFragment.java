@@ -24,6 +24,7 @@ import dev.android.kevin.project.UI.adpater.ReviewAdapter;
 import dev.android.kevin.project.base.contract.DetailFragmentContract;
 import dev.android.kevin.project.model.DetailBean;
 import dev.android.kevin.project.presenter.DetailFragmentPresenter;
+import dev.android.kevin.project.util.Utility;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -49,6 +50,11 @@ public class DetailFragment extends Fragment implements DetailFragmentContract.V
     RecyclerView photo_recyclerView;
     @BindView(R.id.review_list)
     RecyclerView review_recyclerView;
+    @BindView(R.id.item_phone_number)
+    TextView phoneView;
+
+    private double currentLat;
+    private double currentLong;
 
 
     private DetailFragmentContract.Presenter presenter;
@@ -66,6 +72,8 @@ public class DetailFragment extends Fragment implements DetailFragmentContract.V
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
 
+        currentLat = getArguments().getDouble("lat");
+        currentLong = getArguments().getDouble("long");
         presenter = new DetailFragmentPresenter();
         presenter.attachView(this);
 
@@ -84,6 +92,17 @@ public class DetailFragment extends Fragment implements DetailFragmentContract.V
         Picasso.with(getActivity()).load(detailBean.getResult().getIcon()).into(iconView);
         nameView.setText(detailBean.getResult().getName());
         ratingView.setText(String.valueOf(detailBean.getResult().getRating()));
+        addressView.setText(detailBean.getResult().getFormatted_address());
+        phoneView.setText(detailBean.getResult().getFormatted_phone_number());
+        priceView.setText(Utility.getPriceRange(detailBean.getResult().getPrice_level()));
+        distanceView.setText(distance(currentLat, currentLong, detailBean));
+    }
+
+    private String distance(double currentlat, double currentLong, DetailBean detailBean) {
+        double distance = Utility.distance(currentlat, detailBean.getResult().getGeometry().getLocation().getLat(),
+                currentLong, detailBean.getResult().getGeometry().getLocation().getLng(), 0, 0);
+
+        return String.valueOf((int) distance);
     }
 
     private void bindPhotoRecyclerView(DetailBean detailBean) {
@@ -93,7 +112,7 @@ public class DetailFragment extends Fragment implements DetailFragmentContract.V
     }
 
     private void bindReview_recyclerView(DetailBean detailBean) {
-        ReviewAdapter reviewAdapter = new ReviewAdapter(detailBean.getResult().getReviews(),getActivity());
+        ReviewAdapter reviewAdapter = new ReviewAdapter(detailBean.getResult().getReviews(), getActivity());
         review_recyclerView.setAdapter(reviewAdapter);
         review_recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }

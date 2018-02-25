@@ -49,11 +49,13 @@ public class ListFragmentPresenter implements ListFragmentContract.Presenter {
     }
 
     @Override
-    public void fetchList(String keyword) {
+    public void fetchList(String keyword, String location) {
+
+      //  String location1 = "40.736748369881035,-73.82068104165768";
 
         if(dataManager.searchByDistance()){
 
-            DisposableObserver disposableObserver = dataManager.fetchListByRank("40.736748369881035,-73.82068104165768", "distance", dataManager.getSearchType(), keyword, "AIzaSyBBt4YtyVgJ2N3S7vUHlGw8F1sZY26bM20")
+            DisposableObserver disposableObserver = dataManager.fetchListByRank(location, "distance", dataManager.getSearchType(), keyword, "AIzaSyBBt4YtyVgJ2N3S7vUHlGw8F1sZY26bM20")
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnSubscribe(new Consumer<Disposable>() {
@@ -81,6 +83,7 @@ public class ListFragmentPresenter implements ListFragmentContract.Presenter {
 
                         }
                     });
+            compositeDisposable.add(disposableObserver);
 
 
         }

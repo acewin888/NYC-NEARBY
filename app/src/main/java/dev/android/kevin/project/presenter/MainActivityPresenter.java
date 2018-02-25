@@ -1,5 +1,8 @@
 package dev.android.kevin.project.presenter;
 
+import android.content.Context;
+import android.location.LocationManager;
+
 import dev.android.kevin.project.UI.MainActivity;
 import dev.android.kevin.project.base.contract.MainActivityContract;
 
@@ -22,6 +25,7 @@ public class MainActivityPresenter implements MainActivityContract.Presenter {
         this.view = null;
     }
 
+
     @Override
     public void searchQuery(String keyword) {
         view.showSearchQuery(keyword);
@@ -29,8 +33,8 @@ public class MainActivityPresenter implements MainActivityContract.Presenter {
     }
 
     @Override
-    public void populateListFragment(String keyword) {
-        view.showListFragment(keyword);
+    public void populateListFragment(String keyword,double currentLatitude, double currentLongitude) {
+        view.showListFragment(keyword, currentLatitude, currentLongitude);
 
     }
 

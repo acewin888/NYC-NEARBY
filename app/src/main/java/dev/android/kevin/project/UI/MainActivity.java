@@ -28,7 +28,7 @@ import dev.android.kevin.project.UI.adpater.PlaceSearchAdapter;
 import dev.android.kevin.project.base.contract.MainActivityContract;
 import dev.android.kevin.project.presenter.MainActivityPresenter;
 
-public class MainActivity extends AppCompatActivity implements MainActivityContract.View, PlaceSearchAdapter.OnItemClickListener{
+public class MainActivity extends AppCompatActivity implements MainActivityContract.View, PlaceSearchAdapter.OnItemClickListener {
 
 
     @BindView(R.id.navigation)
@@ -36,10 +36,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     @BindView(R.id.searchView)
     android.support.v7.widget.SearchView searchView;
 
-    private final int REQUEST_LOCATION = 2;
+    private final int REQUEST_LOCATION = 3;
     private MainActivityContract.Presenter presenter;
     private LocationManager locationManager;
-    String lattitude,longitude;
+    double lattitude, longitude;
+
 
 
     @Override
@@ -55,8 +56,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         searchView.setOnQueryTextListener(onQueryTextListener);
-
-
 
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -81,44 +80,44 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
             Location location1 = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
-            Location location2 = locationManager.getLastKnownLocation(LocationManager. PASSIVE_PROVIDER);
+            Location location2 = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
 
             if (location != null) {
                 double latti = location.getLatitude();
                 double longi = location.getLongitude();
-                lattitude = String.valueOf(latti);
-                longitude = String.valueOf(longi);
+                lattitude = latti;
+                longitude = longi;
 
-                Log.d("xuyang", "Your current location is"+ "\n" + "Lattitude = " + lattitude
+                Log.d("xuyang", "Your current location is" + "\n" + "Lattitude = " + lattitude
                         + "\n" + "Longitude = " + longitude);
 
-            } else  if (location1 != null) {
+            } else if (location1 != null) {
                 double latti = location1.getLatitude();
                 double longi = location1.getLongitude();
-                lattitude = String.valueOf(latti);
-                longitude = String.valueOf(longi);
+                lattitude = latti;
+                longitude = longi;
 
-                Log.d("xuyang", "Your current location is"+ "\n" + "Lattitude = " + lattitude
+                Log.d("xuyang", "Your current location is" + "\n" + "Lattitude = " + lattitude
                         + "\n" + "Longitude = " + longitude);
 
-            } else  if (location2 != null) {
+            } else if (location2 != null) {
                 double latti = location2.getLatitude();
                 double longi = location2.getLongitude();
-                lattitude = String.valueOf(latti);
-                longitude = String.valueOf(longi);
+                lattitude = latti;
+                longitude = longi;
 
-                Log.d("xuyang", "Your current location is"+ "\n" + "Lattitude = " + lattitude
+                Log.d("xuyang", "Your current location is" + "\n" + "Lattitude = " + lattitude
                         + "\n" + "Longitude = " + longitude);
 
-            }else{
+            } else {
 
-                Toast.makeText(this,"Unble to Trace your location",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Unble to Trace your location", Toast.LENGTH_SHORT).show();
 
             }
         }
     }
 
-    protected void buildAlertMessageNoGps() {
+    private void buildAlertMessageNoGps() {
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Please Turn ON your GPS Connection")
@@ -138,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     }
 
     @OnClick(R.id.filter_setting)
-    public void onClick(){
+    public void onClick() {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
     }
@@ -146,20 +145,25 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
     @Override
     public void showSearchQuery(String keyword) {
-        presenter.populateListFragment(keyword);
+
+
+
+        presenter.populateListFragment(keyword, lattitude, longitude);
 
     }
 
     @Override
-    public void showListFragment(String keyword) {
+    public void showListFragment(String keyword, double currentLatitude, double currentLongitude) {
         ListFragment listFragment = new ListFragment();
         Bundle bundle = new Bundle();
         bundle.putString("keyword", keyword);
+        bundle.putDouble("lat", currentLatitude);
+        bundle.putDouble("long", currentLongitude);
         listFragment.setArguments(bundle);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.add(R.id.response_container, listFragment, "listfragment");
+        transaction.replace(R.id.response_container, listFragment, "listfragment");
         transaction.commit();
 
 
@@ -171,7 +175,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         Bundle bundle = new Bundle();
         bundle.putString("placeid", placeid);
         detailFragment.setArguments(bundle);
-
+        bundle.putDouble("lat", lattitude);
+        bundle.putDouble("long", longitude);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.response_container, detailFragment, "detailfragment").addToBackStack("stack");

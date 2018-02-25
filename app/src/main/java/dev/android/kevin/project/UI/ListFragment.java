@@ -20,6 +20,7 @@ import dev.android.kevin.project.UI.adpater.PlaceSearchAdapter;
 import dev.android.kevin.project.base.contract.ListFragmentContract;
 import dev.android.kevin.project.model.PlaceSearchBean;
 import dev.android.kevin.project.presenter.ListFragmentPresenter;
+import dev.android.kevin.project.util.ListItemDecoration;
 
 
 public class ListFragment extends Fragment implements ListFragmentContract.View {
@@ -29,7 +30,11 @@ public class ListFragment extends Fragment implements ListFragmentContract.View 
     @BindView(R.id.progressbar)
     ProgressBar progressBar;
 
+    private double currentLatitude;
+    private double currentLongitude;
+
     private ListFragmentContract.Presenter presenter;
+    private ListItemDecoration listItemDecoration;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,16 +46,22 @@ public class ListFragment extends Fragment implements ListFragmentContract.View 
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
+
+        currentLatitude = getArguments().getDouble("lat");
+        currentLongitude = getArguments().getDouble("long");
+        listItemDecoration = new ListItemDecoration(getActivity());
         presenter = new ListFragmentPresenter();
         presenter.attachView(this);
-        presenter.fetchList(getArguments().getString("keyword"));
+        presenter.fetchList(getArguments().getString("keyword"), currentLatitude + "," + currentLongitude);
     }
 
     @Override
     public void showList(List<PlaceSearchBean.Results> list) {
         PlaceSearchAdapter adapter = new PlaceSearchAdapter(list, getActivity());
+        adapter.setCurrentlLocation(currentLatitude, currentLongitude);
         adapter.setOnItemClickListener((MainActivity) getActivity());
         recyclerView.setAdapter(adapter);
+        recyclerView.addItemDecoration(listItemDecoration);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 

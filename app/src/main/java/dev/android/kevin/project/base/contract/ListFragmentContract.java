@@ -14,7 +14,7 @@ public interface ListFragmentContract {
 
     interface Presenter extends BasePresenter<View>{
 
-        void fetchList(String keyword);
+        void fetchList(String keyword, String location);
     }
 
 

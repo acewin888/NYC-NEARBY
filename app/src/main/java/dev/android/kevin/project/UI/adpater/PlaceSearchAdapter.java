@@ -33,6 +33,10 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
     private OnItemClickListener onItemClickListener;
     private LayoutInflater layoutInflater;
 
+    private double currentLat;
+    private double currentLong;
+
+
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
@@ -41,6 +45,12 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
         this.list = list;
         this.context = context;
         layoutInflater = LayoutInflater.from(context);
+    }
+
+    public void setCurrentlLocation(double latitude, double longitudi){
+        currentLat = latitude;
+        currentLong = longitudi;
+
     }
 
     @Override
@@ -89,46 +99,23 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
         });
 
 
-        double lat1 = 40.736748369881035;
-        double lon1 = -73.8206810416576;
+//        double lat1 = 40.736748369881035;
+//        double lon1 = -73.8206810416576;
 
         double lat2 = list.get(position).getGeometry().getLocation().getLat();
         double long2 = list.get(position).getGeometry().getLocation().getLng();
 
-        double distance1 = Utility.distance(lat1, lat2, lon1, long2, 0, 0);
+        double distance1 = Utility.distance(currentLat, lat2, currentLong, long2, 0, 0);
         int distance = (int) distance1;
         holder.distanceView.setText(String.valueOf(distance));
 
 
-        holder.priceView.setText(getPriceRange(list.get(position).getPrice_level()));
+        holder.priceView.setText(Utility.getPriceRange(list.get(position).getPrice_level()));
 
 
     }
 
-    private String getPriceRange(int rating) {
-        String price;
-        switch (rating) {
-            case 0:
-                price = "$";
-                break;
-            case 1:
-                price = "$$";
-                break;
-            case 2:
-                price = "$$$";
-                break;
-            case 3:
-                price = "$$$$";
-                break;
-            case 4:
-                price = "$$$$$";
-                break;
-            default:
-                price = "unknow";
 
-        }
-        return price;
-    }
 
     @Override
     public int getItemCount() {

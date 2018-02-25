@@ -1,5 +1,7 @@
 package dev.android.kevin.project.util;
 
+import android.content.Context;
+
 /**
  * Created by kevinsun on 2/24/18.
  */
@@ -24,5 +26,36 @@ public class Utility {
         distance = Math.pow(distance, 2) + Math.pow(height, 2);
 
         return Math.sqrt(distance);
+    }
+
+
+    public static int dp2px(Context context, float dpValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
+    }
+
+    public static String getPriceRange(int rating) {
+        String price;
+        switch (rating) {
+            case 0:
+                price = "$";
+                break;
+            case 1:
+                price = "$$";
+                break;
+            case 2:
+                price = "$$$";
+                break;
+            case 3:
+                price = "$$$$";
+                break;
+            case 4:
+                price = "$$$$$";
+                break;
+            default:
+                price = "unknow";
+
+        }
+        return price;
     }
 }
