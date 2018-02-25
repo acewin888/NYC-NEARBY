@@ -41,7 +41,7 @@ public class SharePreferenceImpl implements  SharePreferenceHelper {
     }
 
     @Override
-    public boolean searchByDistance() {
+    public boolean isSearchByDistance() {
         return sharedPreferences.getBoolean("distance", DEFAULT_SEARCH_BY_DISTANCE);
     }
 }

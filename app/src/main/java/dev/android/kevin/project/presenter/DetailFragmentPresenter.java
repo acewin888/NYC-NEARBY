@@ -7,6 +7,8 @@ import dev.android.kevin.project.data.prefs.SharePreferenceImpl;
 import dev.android.kevin.project.model.DetailBean;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
@@ -46,10 +48,17 @@ public class DetailFragmentPresenter implements DetailFragmentContract.Presenter
         DisposableObserver disposableObserver = dataManager.fetchDetail(placeid, "AIzaSyBBt4YtyVgJ2N3S7vUHlGw8F1sZY26bM20")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(new Consumer<Disposable>() {
+                    @Override
+                    public void accept(Disposable disposable) throws Exception {
+                        view.showLoadingProgress();
+                    }
+                })
                 .subscribeWith(new DisposableObserver<DetailBean>() {
                     @Override
                     public void onNext(DetailBean detailBean) {
                         view.showDetail(detailBean);
+                        view.hideLoadingProgress();
                     }
 
                     @Override

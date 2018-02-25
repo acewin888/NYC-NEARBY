@@ -21,5 +21,9 @@ public interface DetailFragmentContract {
 
         void showDetail(DetailBean detailBean);
 
+        void showLoadingProgress();
+
+        void hideLoadingProgress();
+
     }
 }

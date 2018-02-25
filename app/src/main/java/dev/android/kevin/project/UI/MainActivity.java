@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     @BindView(R.id.searchView)
     android.support.v7.widget.SearchView searchView;
 
-    private final int REQUEST_LOCATION = 3;
+    private final int REQUEST_LOCATION = 4;
     private MainActivityContract.Presenter presenter;
     private LocationManager locationManager;
     double lattitude, longitude;

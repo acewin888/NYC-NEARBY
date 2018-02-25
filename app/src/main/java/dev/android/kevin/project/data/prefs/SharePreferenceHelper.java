@@ -12,6 +12,6 @@ public interface SharePreferenceHelper {
 
     boolean searchByRating();
 
-    boolean searchByDistance();
+    boolean isSearchByDistance();
 
 }

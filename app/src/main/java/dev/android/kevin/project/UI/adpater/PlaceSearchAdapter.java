@@ -17,6 +17,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dev.android.kevin.project.Constant;
 import dev.android.kevin.project.R;
 import dev.android.kevin.project.model.DetailBean;
 import dev.android.kevin.project.model.PlaceSearchBean;
@@ -47,7 +48,7 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
         layoutInflater = LayoutInflater.from(context);
     }
 
-    public void setCurrentlLocation(double latitude, double longitudi){
+    public void setCurrentlLocation(double latitude, double longitudi) {
         currentLat = latitude;
         currentLong = longitudi;
 
@@ -63,17 +64,9 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
         holder.nameView.setText(list.get(position).getName());
         holder.ratingView.setText(String.valueOf(list.get(position).getRating()));
         holder.addressView.setText(list.get(position).getVicinity());
-
-
-        List<String> types = list.get(position).getTypes();
-
-
-        String typeList = "";
-
-        for (int i = 0; i < types.size(); i++) {
-            typeList += types.get(i);
-        }
-        holder.typesView.setText(typeList);
+        holder.typesView.setText(Utility.getTypeString(list.get(position).getTypes()));
+        holder.priceView.setText(Utility.getPriceRange(list.get(position).getPrice_level()));
+        holder.distanceView.setText(getDistance(list, position));
 
         if (list.get(position).getOpening_hours() != null) {
             if (!list.get(position).getOpening_hours().isOpen_now()) {
@@ -81,15 +74,13 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
             }
         }
 
-
         List<PlaceSearchBean.Results.Photos> photos = list.get(position).getPhotos();
-
         if (photos != null) {
             String reference = photos.get(0).getPhoto_reference();
-            String url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=150&photoreference=" + reference + "&key=AIzaSyBBt4YtyVgJ2N3S7vUHlGw8F1sZY26bM20";
+            //  String url1 = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=150&photoreference=" + reference + "&key=AIzaSyBBt4YtyVgJ2N3S7vUHlGw8F1sZY26bM20";
+            String url = Constant.PHOTO_URL_150 + reference + Constant.API_KEY;
             Picasso.with(context).load(url).into(holder.itemImage);
         }
-
         holder.itemContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,23 +89,15 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
             }
         });
 
-
-//        double lat1 = 40.736748369881035;
-//        double lon1 = -73.8206810416576;
-
-        double lat2 = list.get(position).getGeometry().getLocation().getLat();
-        double long2 = list.get(position).getGeometry().getLocation().getLng();
-
-        double distance1 = Utility.distance(currentLat, lat2, currentLong, long2, 0, 0);
-        int distance = (int) distance1;
-        holder.distanceView.setText(String.valueOf(distance));
-
-
-        holder.priceView.setText(Utility.getPriceRange(list.get(position).getPrice_level()));
-
-
     }
 
+    private String getDistance(List<PlaceSearchBean.Results> list, int position) {
+        double lat2 = list.get(position).getGeometry().getLocation().getLat();
+        double long2 = list.get(position).getGeometry().getLocation().getLng();
+        double distanceWithCurrentLocation = Utility.distance(currentLat, lat2, currentLong, long2, 0, 0);
+        int distance = (int) distanceWithCurrentLocation;
+        return String.valueOf(distance);
+    }
 
 
     @Override

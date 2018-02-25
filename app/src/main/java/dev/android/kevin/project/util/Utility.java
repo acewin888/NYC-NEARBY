@@ -2,6 +2,10 @@ package dev.android.kevin.project.util;
 
 import android.content.Context;
 
+import java.util.List;
+
+import dev.android.kevin.project.model.DetailBean;
+
 /**
  * Created by kevinsun on 2/24/18.
  */
@@ -9,7 +13,7 @@ import android.content.Context;
 public class Utility {
 
     public static double distance(double lat1, double lat2, double lon1,
-                            double lon2, double el1, double el2) {
+                                  double lon2, double el1, double el2) {
 
         final int R = 6371; // Radius of the earth
 
@@ -26,12 +30,6 @@ public class Utility {
         distance = Math.pow(distance, 2) + Math.pow(height, 2);
 
         return Math.sqrt(distance);
-    }
-
-
-    public static int dp2px(Context context, float dpValue) {
-        final float scale = context.getResources().getDisplayMetrics().density;
-        return (int) (dpValue * scale + 0.5f);
     }
 
     public static String getPriceRange(int rating) {
@@ -57,5 +55,17 @@ public class Utility {
 
         }
         return price;
+    }
+
+
+    public static String getTypeString(List<String> list) {
+        String words = "";
+        for (int i = 0; i < list.size() - 1; i++) {
+            words += list.get(i) + ", ";
+        }
+        words = words + list.get(list.size() - 1);
+
+        return words;
+
     }
 }

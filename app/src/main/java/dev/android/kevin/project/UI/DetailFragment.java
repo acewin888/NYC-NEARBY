@@ -10,11 +10,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,11 +56,13 @@ public class DetailFragment extends Fragment implements DetailFragmentContract.V
     RecyclerView review_recyclerView;
     @BindView(R.id.item_phone_number)
     TextView phoneView;
+    @BindView(R.id.progressbar)
+    ProgressBar progressBar;
+    @BindView(R.id.detail_container)
+    LinearLayout containerView;
 
     private double currentLat;
     private double currentLong;
-
-
     private DetailFragmentContract.Presenter presenter;
 
 
@@ -81,12 +87,27 @@ public class DetailFragment extends Fragment implements DetailFragmentContract.V
         presenter.fetchDetail(placeid);
     }
 
+
+    @Override
+    public void showLoadingProgress() {
+        containerView.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideLoadingProgress() {
+        containerView.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.GONE);
+
+    }
+
     @Override
     public void showDetail(DetailBean detailBean) {
         bindDetail(detailBean);
         bindPhotoRecyclerView(detailBean);
         bindReview_recyclerView(detailBean);
     }
+
 
     private void bindDetail(DetailBean detailBean) {
         Picasso.with(getActivity()).load(detailBean.getResult().getIcon()).into(iconView);
@@ -96,6 +117,21 @@ public class DetailFragment extends Fragment implements DetailFragmentContract.V
         phoneView.setText(detailBean.getResult().getFormatted_phone_number());
         priceView.setText(Utility.getPriceRange(detailBean.getResult().getPrice_level()));
         distanceView.setText(distance(currentLat, currentLong, detailBean));
+        typesView.setText(getTypeString(detailBean));
+
+
+    }
+
+    private String getTypeString(DetailBean detailBean) {
+        List<String> list = detailBean.getResult().getTypes();
+        String words = "";
+        for (int i = 0; i < list.size() - 1; i++) {
+            words += list.get(i) + ", ";
+        }
+        words = words + list.get(list.size() - 1);
+
+        return words;
+
     }
 
     private String distance(double currentlat, double currentLong, DetailBean detailBean) {

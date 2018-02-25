@@ -55,7 +55,7 @@ public class DataManager implements NetWorkHelper, SharePreferenceHelper {
     }
 
     @Override
-    public boolean searchByDistance() {
-        return sharePreference.searchByDistance();
+    public boolean isSearchByDistance() {
+        return sharePreference.isSearchByDistance();
     }
 }
