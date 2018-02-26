@@ -43,4 +43,25 @@ public class Constant {
     public static final String BACKSTACK = "STACK";
 
 
+    // sharepreference constant
+
+    public static final String RADIUS_KEY = "radius_text";
+
+    public static final String TYPE_LIST = "type_list";
+
+    public static final String RATING_KEY = "rating";
+
+    public static final String DISTANCE_KEY = "distance";
+
+    public static final String DEFAULT_RADIUS = "5000";
+
+    public static final String DEFAULT_SEARCH_TYPE = "restaurant";
+
+    public static final boolean DEFAULT_SEARCH_BY_RATING = false;
+
+    public static final boolean DEFAULT_SEARCH_BY_DISTANCE = false;
+
+
+
+
 }
