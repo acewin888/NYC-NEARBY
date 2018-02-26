@@ -118,20 +118,7 @@ public class DetailFragment extends Fragment implements DetailFragmentContract.V
         phoneView.setText(detailBean.getResult().getFormatted_phone_number());
         priceView.setText(Utility.getPriceRange(detailBean.getResult().getPrice_level()));
         distanceView.setText(distance(currentLat, currentLong, detailBean));
-        typesView.setText(getTypeString(detailBean));
-
-
-    }
-
-    private String getTypeString(DetailBean detailBean) {
-        List<String> list = detailBean.getResult().getTypes();
-        String words = "";
-        for (int i = 0; i < list.size() - 1; i++) {
-            words += list.get(i) + ", ";
-        }
-        words = words + list.get(list.size() - 1);
-
-        return words;
+        typesView.setText(Utility.getTypeString(detailBean.getResult().getTypes()));
 
     }
 

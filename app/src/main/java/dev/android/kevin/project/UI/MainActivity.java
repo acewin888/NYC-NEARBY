@@ -39,9 +39,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
 
     private final int REQUEST_LOCATION = 5;
     private MainActivityContract.Presenter presenter;
-    private LocationManager locationManager;
-    double lattitude, longitude;
-
+    private double lattitude, longitude;
 
 
     @Override
@@ -58,83 +56,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         searchView.setOnQueryTextListener(onQueryTextListener);
 
+        presenter.fetchCurrentLocation(this);
 
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            buildAlertMessageNoGps();
-
-        } else if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            getLocation();
-        }
-
-    }
-
-    private void getLocation() {
-        if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission
-                (MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
-
-        } else {
-            Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-
-            Location location1 = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-            Location location2 = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
-
-            if (location != null) {
-                double latti = location.getLatitude();
-                double longi = location.getLongitude();
-                lattitude = latti;
-                longitude = longi;
-
-                Log.d("xuyang", "Your current location is" + "\n" + "Lattitude = " + lattitude
-                        + "\n" + "Longitude = " + longitude);
-
-            } else if (location1 != null) {
-                double latti = location1.getLatitude();
-                double longi = location1.getLongitude();
-                lattitude = latti;
-                longitude = longi;
-
-                Log.d("xuyang", "Your current location is" + "\n" + "Lattitude = " + lattitude
-                        + "\n" + "Longitude = " + longitude);
-
-            } else if (location2 != null) {
-                double latti = location2.getLatitude();
-                double longi = location2.getLongitude();
-                lattitude = latti;
-                longitude = longi;
-
-                Log.d("xuyang", "Your current location is" + "\n" + "Lattitude = " + lattitude
-                        + "\n" + "Longitude = " + longitude);
-
-            } else {
-
-                Toast.makeText(this, "Unble to Trace your location", Toast.LENGTH_SHORT).show();
-
-            }
-        }
-    }
-
-    private void buildAlertMessageNoGps() {
-
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Please Turn ON your GPS Connection")
-                .setCancelable(false)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(final DialogInterface dialog, final int id) {
-                        startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                    }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    public void onClick(final DialogInterface dialog, final int id) {
-                        dialog.cancel();
-                    }
-                });
-        final AlertDialog alert = builder.create();
-        alert.show();
     }
 
     @OnClick(R.id.filter_setting)
@@ -143,14 +66,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         startActivity(intent);
     }
 
-
     @Override
     public void showSearchQuery(String keyword) {
-
-
-
         presenter.populateListFragment(keyword, lattitude, longitude);
-
     }
 
     @Override
@@ -183,6 +101,36 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
         transaction.replace(R.id.response_container, detailFragment, Constant.DETAILFRAGMENT_TAG).addToBackStack(Constant.BACKSTACK);
         transaction.commit();
 
+    }
+
+    @Override
+    public void setCurrentLocation(double lat, double lon) {
+        lattitude = lat;
+        longitude = lon;
+    }
+
+    @Override
+    public void showLocationError() {
+        Toast.makeText(this, "Unble to Trace your location", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showTurnOnLocationAlert() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Please Turn ON your GPS Connection")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, final int id) {
+                        startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
     }
 
 
