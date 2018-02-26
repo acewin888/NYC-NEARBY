@@ -1,5 +1,8 @@
 package dev.android.kevin.project.presenter;
 
+import android.util.Log;
+
+import dev.android.kevin.project.Constant;
 import dev.android.kevin.project.base.contract.DetailFragmentContract;
 import dev.android.kevin.project.data.DataManager;
 import dev.android.kevin.project.data.network.RetrofitManager;
@@ -45,7 +48,7 @@ public class DetailFragmentPresenter implements DetailFragmentContract.Presenter
 
     @Override
     public void fetchDetail(String placeid) {
-        DisposableObserver disposableObserver = dataManager.fetchDetail(placeid, "AIzaSyBBt4YtyVgJ2N3S7vUHlGw8F1sZY26bM20")
+        DisposableObserver disposableObserver = dataManager.fetchDetail(placeid, Constant.BACKUP_KEY)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(new Consumer<Disposable>() {
@@ -63,6 +66,7 @@ public class DetailFragmentPresenter implements DetailFragmentContract.Presenter
 
                     @Override
                     public void onError(Throwable e) {
+                        Log.d("onError===", e.toString());
 
                     }
 

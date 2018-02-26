@@ -1,5 +1,10 @@
 package dev.android.kevin.project.presenter;
 
+import android.util.Log;
+
+import java.util.List;
+
+import dev.android.kevin.project.Constant;
 import dev.android.kevin.project.base.contract.ListFragmentContract;
 import dev.android.kevin.project.data.DataManager;
 import dev.android.kevin.project.data.network.RetrofitManager;
@@ -42,10 +47,8 @@ public class ListFragmentPresenter implements ListFragmentContract.Presenter {
 
     @Override
     public void fetchList(String keyword, String location) {
-        //  String location1 = "40.736748369881035,-73.82068104165768";
         if (dataManager.isSearchByDistance()) {
-
-            DisposableObserver disposableObserver = dataManager.fetchListByRank(location, "distance", dataManager.getSearchType(), keyword, "AIzaSyBBt4YtyVgJ2N3S7vUHlGw8F1sZY26bM20")
+            DisposableObserver disposableObserver = dataManager.fetchListByRank(location, Constant.SORT_BY_DISTANCE, dataManager.getSearchType(), keyword, Constant.BACKUP_KEY)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnSubscribe(new Consumer<Disposable>() {
@@ -65,7 +68,7 @@ public class ListFragmentPresenter implements ListFragmentContract.Presenter {
 
                         @Override
                         public void onError(Throwable e) {
-
+                            Log.d("xuyangonOnerror", e.toString());
                         }
 
                         @Override
@@ -77,7 +80,7 @@ public class ListFragmentPresenter implements ListFragmentContract.Presenter {
 
 
         } else {
-            DisposableObserver disposableObserver = dataManager.fetchList(location, dataManager.getRadius(), dataManager.getSearchType(), keyword, "AIzaSyBBt4YtyVgJ2N3S7vUHlGw8F1sZY26bM20")
+            DisposableObserver disposableObserver = dataManager.fetchList(location, dataManager.getRadius(), dataManager.getSearchType(), keyword, Constant.BACKUP_KEY)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnSubscribe(new Consumer<Disposable>() {
@@ -91,8 +94,14 @@ public class ListFragmentPresenter implements ListFragmentContract.Presenter {
                         @Override
                         public void onNext(PlaceSearchBean bean) {
 
-                            view.showList(bean.getResults());
-                            view.hideLoadingProgress();
+                            List<PlaceSearchBean.Results> list = bean.getResults();
+
+                            if (list == null || list.size() == 0) {
+                                view.showError("error");
+                            } else {
+                                view.showList(bean.getResults());
+                                view.hideLoadingProgress();
+                            }
                         }
 
                         @Override

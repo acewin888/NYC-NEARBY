@@ -23,6 +23,7 @@ import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import dev.android.kevin.project.Constant;
 import dev.android.kevin.project.R;
 import dev.android.kevin.project.UI.adpater.PlaceSearchAdapter;
 import dev.android.kevin.project.base.contract.MainActivityContract;
@@ -156,14 +157,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     public void showListFragment(String keyword, double currentLatitude, double currentLongitude) {
         ListFragment listFragment = new ListFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("keyword", keyword);
-        bundle.putDouble("lat", currentLatitude);
-        bundle.putDouble("long", currentLongitude);
+        bundle.putString(Constant.KEYWORD_LISTFRAGMENT, keyword);
+        bundle.putDouble(Constant.LATITUDE_LISTFRAGMENT, currentLatitude);
+        bundle.putDouble(Constant.LONGITUDE_LISTFRAGMENT, currentLongitude);
         listFragment.setArguments(bundle);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.response_container, listFragment, "listfragment");
+        transaction.replace(R.id.response_container, listFragment, Constant.LISTFRAGMENT_TAG);
         transaction.commit();
 
 
@@ -173,13 +174,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     public void showDetailFragment(String placeid) {
         DetailFragment detailFragment = new DetailFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("placeid", placeid);
+        bundle.putString(Constant.PLACEID, placeid);
         detailFragment.setArguments(bundle);
-        bundle.putDouble("lat", lattitude);
-        bundle.putDouble("long", longitude);
+        bundle.putDouble(Constant.LATITUDE_DETAILFRAGMENT, lattitude);
+        bundle.putDouble(Constant.LONGITUDE_DETAILFRAGMENT, longitude);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.response_container, detailFragment, "detailfragment").addToBackStack("stack");
+        transaction.replace(R.id.response_container, detailFragment, Constant.DETAILFRAGMENT_TAG).addToBackStack(Constant.BACKSTACK);
         transaction.commit();
 
     }
@@ -188,16 +189,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityContr
     private android.support.v7.widget.SearchView.OnQueryTextListener onQueryTextListener = new android.support.v7.widget.SearchView.OnQueryTextListener() {
         @Override
         public boolean onQueryTextSubmit(String query) {
-            Log.d("xuyang", query);
-
+            Log.d("==onQueryTextSubmit", query);
             presenter.searchQuery(query);
             return false;
         }
 
         @Override
         public boolean onQueryTextChange(String newText) {
-
             Log.d("xuyang=== textchanged", newText);
+
+
             return false;
         }
     };

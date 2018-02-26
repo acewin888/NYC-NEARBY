@@ -16,6 +16,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dev.android.kevin.project.Constant;
 import dev.android.kevin.project.R;
 import dev.android.kevin.project.UI.adpater.PlaceSearchAdapter;
 import dev.android.kevin.project.base.contract.ListFragmentContract;
@@ -48,12 +49,12 @@ public class ListFragment extends Fragment implements ListFragmentContract.View 
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
 
-        currentLatitude = getArguments().getDouble("lat");
-        currentLongitude = getArguments().getDouble("long");
+        currentLatitude = getArguments().getDouble(Constant.LATITUDE_LISTFRAGMENT);
+        currentLongitude = getArguments().getDouble(Constant.LONGITUDE_LISTFRAGMENT);
         listItemDecoration = new ListItemDecoration(getActivity());
         presenter = new ListFragmentPresenter();
         presenter.attachView(this);
-        presenter.fetchList(getArguments().getString("keyword"), currentLatitude + "," + currentLongitude);
+        presenter.fetchList(getArguments().getString(Constant.KEYWORD_LISTFRAGMENT), currentLatitude + "," + currentLongitude);
     }
 
     @Override

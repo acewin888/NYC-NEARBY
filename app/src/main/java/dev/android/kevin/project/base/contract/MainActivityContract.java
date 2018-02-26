@@ -12,9 +12,6 @@ public interface MainActivityContract {
 
     interface Presenter extends BasePresenter<View> {
 
-
-
-
         void searchQuery(String keyword);
 
 
@@ -31,7 +28,6 @@ public interface MainActivityContract {
 
 
         void showSearchQuery(String keyword);
-
 
         void showListFragment(String keyword, double currentLatitude, double currentLongitude);
 

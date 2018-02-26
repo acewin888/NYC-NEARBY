@@ -22,6 +22,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dev.android.kevin.project.Constant;
 import dev.android.kevin.project.R;
 import dev.android.kevin.project.UI.adpater.PhotoAdapter;
 import dev.android.kevin.project.UI.adpater.ReviewAdapter;
@@ -78,12 +79,12 @@ public class DetailFragment extends Fragment implements DetailFragmentContract.V
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
 
-        currentLat = getArguments().getDouble("lat");
-        currentLong = getArguments().getDouble("long");
+        currentLat = getArguments().getDouble(Constant.LATITUDE_DETAILFRAGMENT);
+        currentLong = getArguments().getDouble(Constant.LONGITUDE_DETAILFRAGMENT);
         presenter = new DetailFragmentPresenter();
         presenter.attachView(this);
 
-        String placeid = getArguments().getString("placeid");
+        String placeid = getArguments().getString(Constant.PLACEID);
         presenter.fetchDetail(placeid);
     }
 
