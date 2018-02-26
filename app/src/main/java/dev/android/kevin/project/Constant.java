@@ -16,6 +16,8 @@ public class Constant {
 
     public static final String BACKUP_KEY = "AIzaSyDqsVY4pV06vmJ9LpbH6NiXgzVLH_CMM1I";
 
+    public static final String BACKUP_KEY_PICASSO = "&key=AIzaSyDqsVY4pV06vmJ9LpbH6NiXgzVLH_CMM1I";
+
     public static final String SORT_BY_DISTANCE = "distance";
 
     // listFragment bundle

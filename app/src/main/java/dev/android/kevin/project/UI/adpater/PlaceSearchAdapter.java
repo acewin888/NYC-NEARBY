@@ -78,7 +78,7 @@ public class PlaceSearchAdapter extends RecyclerView.Adapter<PlaceSearchAdapter.
         if (photos != null) {
             String reference = photos.get(0).getPhoto_reference();
             //  String url1 = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=150&photoreference=" + reference + "&key=AIzaSyBBt4YtyVgJ2N3S7vUHlGw8F1sZY26bM20";
-            String url = Constant.PHOTO_URL_150 + reference + Constant.BACKUP_KEY;
+            String url = Constant.PHOTO_URL_150 + reference + Constant.BACKUP_KEY_PICASSO;
             Picasso.with(context).load(url).into(holder.itemImage);
         }
         holder.itemContainer.setOnClickListener(new View.OnClickListener() {

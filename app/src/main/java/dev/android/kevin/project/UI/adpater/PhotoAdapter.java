@@ -43,7 +43,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
     public void onBindViewHolder(PhotoViewHolder holder, int position) {
         String reference = list.get(position).getPhoto_reference();
      //   String url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=300&photoreference=" + reference + "&key=AIzaSyBBt4YtyVgJ2N3S7vUHlGw8F1sZY26bM20";
-        String url = Constant.PHOTO_URL_300 + reference + Constant.API_KEY;
+        String url = Constant.PHOTO_URL_300 + reference + Constant.BACKUP_KEY_PICASSO;
 
         Picasso.with(context).load(url).into(holder.imageView);
     }
