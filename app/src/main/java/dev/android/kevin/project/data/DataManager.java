@@ -16,9 +16,9 @@ public class DataManager implements NetWorkHelper, SharePreferenceHelper {
 
     private RetrofitAPI retrofitAPI;
 
-    private SharePreferenceImpl sharePreference;
+    private SharePreferenceHelper sharePreference;
 
-    public DataManager(RetrofitAPI retrofitAPI, SharePreferenceImpl sharePreference) {
+    public DataManager(RetrofitAPI retrofitAPI, SharePreferenceHelper sharePreference) {
         this.retrofitAPI = retrofitAPI;
         this.sharePreference = sharePreference;
     }
