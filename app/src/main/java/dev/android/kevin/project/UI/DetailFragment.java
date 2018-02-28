@@ -23,13 +23,19 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import dev.android.kevin.project.Constant;
+import dev.android.kevin.project.MockDatamanger;
 import dev.android.kevin.project.R;
 import dev.android.kevin.project.UI.adpater.PhotoAdapter;
 import dev.android.kevin.project.UI.adpater.ReviewAdapter;
 import dev.android.kevin.project.base.contract.DetailFragmentContract;
+import dev.android.kevin.project.data.DataManager;
+import dev.android.kevin.project.data.network.RetrofitAPI;
+import dev.android.kevin.project.data.prefs.SharePreferenceImpl;
 import dev.android.kevin.project.model.DetailBean;
+import dev.android.kevin.project.model.PlaceSearchBean;
 import dev.android.kevin.project.presenter.DetailFragmentPresenter;
 import dev.android.kevin.project.util.Utility;
+import io.reactivex.Observable;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -66,6 +72,27 @@ public class DetailFragment extends Fragment implements DetailFragmentContract.V
     private double currentLong;
     private DetailFragmentContract.Presenter presenter;
 
+    RetrofitAPI retrofitAPI = new RetrofitAPI() {
+        @Override
+        public Observable<PlaceSearchBean> fetchList(String location, String radius, String type, String keyword, String key) {
+            return null;
+        }
+
+        @Override
+        public Observable<DetailBean> fetchDetail(String placeid, String key) {
+            return null;
+        }
+
+        @Override
+        public Observable<PlaceSearchBean> fetchListByRank(String location, String rankby, String type, String keyword, String key) {
+            return null;
+        }
+    };
+
+    SharePreferenceImpl sharePreference = new SharePreferenceImpl();
+    private DataManager dataManager = new DataManager(retrofitAPI, sharePreference);
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -81,7 +108,12 @@ public class DetailFragment extends Fragment implements DetailFragmentContract.V
 
         currentLat = getArguments().getDouble(Constant.LATITUDE_DETAILFRAGMENT);
         currentLong = getArguments().getDouble(Constant.LONGITUDE_DETAILFRAGMENT);
-        presenter = new DetailFragmentPresenter();
+        presenter = new DetailFragmentPresenter(new MockDatamanger() {
+            @Override
+            public Observable<DetailBean> fetchDetail(String placeid, String key) {
+                return null;
+            }
+        });
         presenter.attachView(this);
 
         String placeid = getArguments().getString(Constant.PLACEID);

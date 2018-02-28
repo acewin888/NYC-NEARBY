@@ -3,6 +3,7 @@ package dev.android.kevin.project.presenter;
 import android.util.Log;
 
 import dev.android.kevin.project.Constant;
+import dev.android.kevin.project.MockDatamanger;
 import dev.android.kevin.project.base.contract.DetailFragmentContract;
 import dev.android.kevin.project.data.DataManager;
 import dev.android.kevin.project.data.network.RetrofitManager;
@@ -25,11 +26,13 @@ public class DetailFragmentPresenter implements DetailFragmentContract.Presenter
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-    private DataManager dataManager;
+    private MockDatamanger dataManager;
 
 
-    public DetailFragmentPresenter() {
-        dataManager = new DataManager(RetrofitManager.provideUserRestService(), new SharePreferenceImpl());
+    public DetailFragmentPresenter(MockDatamanger dataManager) {
+
+        this.dataManager = dataManager;
+        //    dataManager = new DataManager(RetrofitManager.provideUserRestService(), new SharePreferenceImpl());
     }
 
 
