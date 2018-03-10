@@ -28,8 +28,8 @@ public class ListFragmentPresenter implements ListFragmentContract.Presenter {
 
     private DataManager dataManager;
 
-    public ListFragmentPresenter() {
-        dataManager = new DataManager(RetrofitManager.provideUserRestService(), new SharePreferenceImpl());
+    public ListFragmentPresenter(DataManager dataManager) {
+        this.dataManager = dataManager;
     }
 
     @Override
@@ -90,10 +90,8 @@ public class ListFragmentPresenter implements ListFragmentContract.Presenter {
                         }
                     })
                     .subscribeWith(new DisposableObserver<PlaceSearchBean>() {
-
                         @Override
                         public void onNext(PlaceSearchBean bean) {
-
                             List<PlaceSearchBean.Results> list = bean.getResults();
 
                             if (list == null || list.size() == 0) {

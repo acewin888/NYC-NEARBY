@@ -20,6 +20,9 @@ import dev.android.kevin.project.Constant;
 import dev.android.kevin.project.R;
 import dev.android.kevin.project.UI.adpater.PlaceSearchAdapter;
 import dev.android.kevin.project.base.contract.ListFragmentContract;
+import dev.android.kevin.project.data.DataManager;
+import dev.android.kevin.project.data.network.RetrofitManager;
+import dev.android.kevin.project.data.prefs.SharePreferenceImpl;
 import dev.android.kevin.project.model.PlaceSearchBean;
 import dev.android.kevin.project.presenter.ListFragmentPresenter;
 import dev.android.kevin.project.util.ListItemDecoration;
@@ -52,7 +55,8 @@ public class ListFragment extends Fragment implements ListFragmentContract.View 
         currentLatitude = getArguments().getDouble(Constant.LATITUDE_LISTFRAGMENT);
         currentLongitude = getArguments().getDouble(Constant.LONGITUDE_LISTFRAGMENT);
         listItemDecoration = new ListItemDecoration(getActivity());
-        presenter = new ListFragmentPresenter();
+        presenter = new ListFragmentPresenter(new DataManager(RetrofitManager.provideUserRestService(), new SharePreferenceImpl()));
+
         presenter.attachView(this);
         presenter.fetchList(getArguments().getString(Constant.KEYWORD_LISTFRAGMENT), currentLatitude + "," + currentLongitude);
     }
